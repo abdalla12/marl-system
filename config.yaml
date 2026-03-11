@@ -1,0 +1,79 @@
+project:
+  name: "MARL Training System"
+  version: "1.0.0"
+  log_dir: "logs"
+  checkpoint_dir: "checkpoints"
+  results_dir: "results"
+
+environments:
+  traffic:
+    grid_size: 4
+    num_agents: 4
+    max_steps: 500
+    vehicle_spawn_rate: 0.3
+    yellow_phase_duration: 3
+
+  trading:
+    num_agents: 4
+    max_steps: 1000
+    initial_balance: 100000.0
+    num_assets: 3
+    lookback_window: 20
+    transaction_cost: 0.001
+
+  supply_chain:
+    num_agents: 4
+    max_steps: 200
+    max_inventory: 500
+    holding_cost: 1.0
+    backorder_cost: 5.0
+    ordering_cost: 2.0
+    demand_mean: 50
+    demand_std: 15
+
+agents:
+  dqn:
+    learning_rate: 0.001
+    gamma: 0.99
+    epsilon_start: 1.0
+    epsilon_end: 0.01
+    epsilon_decay: 0.995
+    batch_size: 64
+    buffer_size: 100000
+    target_update_freq: 100
+    hidden_dims: [256, 256]
+
+  ppo:
+    learning_rate: 0.0003
+    gamma: 0.99
+    gae_lambda: 0.95
+    clip_range: 0.2
+    n_steps: 2048
+    batch_size: 64
+    n_epochs: 10
+    ent_coef: 0.01
+    vf_coef: 0.5
+
+training:
+  episodes: 1000
+  eval_interval: 50
+  eval_episodes: 10
+  save_interval: 100
+  early_stopping_patience: 200
+  seed: 42
+
+distributed:
+  enabled: false
+  num_workers: 4
+  num_gpus: 0
+  framework: "torch"
+
+tournament:
+  rounds: 10
+  episodes_per_match: 50
+  initial_elo: 1000
+  k_factor: 32
+
+dashboard:
+  port: 8501
+  refresh_interval: 5
